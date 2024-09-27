@@ -51,11 +51,14 @@ def transform_load_data(task_instance):
                         }
     transformed_data_list = [transformed_data]
     df_data = pd.DataFrame(transformed_data_list)
+    aws_credentials = {"key": "xxxxxxxxx", "secret": "xxxxxxxxxx", "token": "xxxxxxxxxxxxxx"} # I will leave it unknown # This will give all privilege to be able to save  the csv inside s3
 
     now = datetime.now()
     dt_string = now.strftime("%d%m%Y%H%M%S")
     dt_string = 'current_weather_data_bangkok_' + dt_string
     df_data.to_csv(f"{dt_string}.csv", index=False)
+    df_data.to_csv(f"s3://bucketsweather/{dt_string}.csv", index=False, storage_options=aws_credentials)
+
 
 with DAG('weather_dag',
         default_args=default_args,
